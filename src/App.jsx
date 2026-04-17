@@ -90,8 +90,32 @@ const pricingMetrics = [
   },
 ];
 
+const demoMessages = [
+  {
+    source: "幫我翻譯這段文字給日本客戶：「我們預計下週三會將樣品寄出，請查收。」",
+    translation: "「来週の水曜日にサンプルを発送する予定ですので、ご査収のほどよろしくお願いいたします。」",
+  },
+  {
+    source: "幫我翻譯成日文：「報價單已更新，請確認最新版本，如有問題歡迎隨時聯繫。」",
+    translation: "「見積書を更新いたしましたので、最新版をご確認ください。ご不明点がございましたら、いつでもご連絡ください。」",
+  },
+  {
+    source: "翻譯給日本合作夥伴：「感謝您昨日的會議，附件是整理後的重點與後續時程。」",
+    translation: "「昨日はお打ち合わせのお時間をいただき、ありがとうございました。添付に要点を整理した資料と今後のスケジュールをお送りします。」",
+  },
+  {
+    source: "幫我用正式日文表達：「目前工廠正在安排生產，若有提前完成會第一時間通知您。」",
+    translation: "「現在、工場にて生産手配を進めております。前倒しで完了した場合は、早急にご連絡いたします。」",
+  },
+  {
+    source: "請翻譯這句給日本客戶：「若您方便，我們想安排下週五下午進行線上簡報。」",
+    translation: "「ご都合がよろしければ、来週金曜日の午後にオンラインでご説明の機会をいただければと存じます。」",
+  },
+];
+
 function App() {
   const [navScrolled, setNavScrolled] = useState(false);
+  const [activeDemoIndex, setActiveDemoIndex] = useState(0);
   const [showTranslatedMessage, setShowTranslatedMessage] = useState(false);
 
   useEffect(() => {
@@ -124,12 +148,34 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setShowTranslatedMessage(true);
-    }, 1800);
+    const revealDelay = 1400;
+    const rotateDelay = 4200;
 
-    return () => window.clearTimeout(timer);
-  }, []);
+    setShowTranslatedMessage(false);
+
+    const revealTimer = window.setTimeout(() => {
+      setShowTranslatedMessage(true);
+    }, revealDelay);
+
+    const rotateTimer = window.setTimeout(() => {
+      setActiveDemoIndex((currentIndex) => (currentIndex + 1) % demoMessages.length);
+    }, rotateDelay);
+
+    return () => {
+      window.clearTimeout(revealTimer);
+      window.clearTimeout(rotateTimer);
+    };
+  }, [activeDemoIndex]);
+
+  const activeDemoMessage = demoMessages[activeDemoIndex];
+
+  useEffect(() => {
+    const chatBody = document.querySelector(".chat-body");
+
+    if (chatBody) {
+      chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
+    }
+  }, [activeDemoIndex, showTranslatedMessage]);
 
   return (
     <div className="site-shell">
@@ -222,20 +268,20 @@ function App() {
               <div className="chat-body">
                 <div className="date-badge">今天</div>
 
-                <div className="message-row user-row">
+                <div className="message-row user-row demo-message" key={`user-${activeDemoIndex}`}>
                   <div className="message user-message">
-                    幫我翻譯這段文字給日本客戶：「我們預計下週三會將樣品寄出，請查收。」
+                    {activeDemoMessage.source}
                   </div>
                 </div>
 
-                <div className="message-row assistant-row reply-row">
+                <div className="message-row assistant-row reply-row" key={`assistant-${activeDemoIndex}`}>
                   <div className="mini-avatar">AI</div>
                   <div
                     className={`message assistant-message ${showTranslatedMessage ? "translated-message" : "typing"}`}
                   >
                     {showTranslatedMessage ? (
                       <strong>
-                        「来週の水曜日にサンプルを発送する予定ですので、ご査収のほどよろしくお願いいたします。」
+                        {activeDemoMessage.translation}
                       </strong>
                     ) : (
                       <>

@@ -457,6 +457,7 @@ button {
   flex: 1;
   background: #0f0f11;
   padding: 1.25rem 1rem;
+  overflow: hidden;
 }
 
 .date-badge {
@@ -472,6 +473,10 @@ button {
 .message-row {
   display: flex;
   margin-bottom: 1rem;
+}
+
+.demo-message {
+  animation: fadeUp 0.45s ease both;
 }
 
 .user-row {
@@ -559,6 +564,7 @@ button {
   display: block;
   color: white;
   font-weight: 700;
+  animation: textGlow 0.45s ease both;
 }
 
 .message-actions {
@@ -1178,6 +1184,17 @@ button {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes textGlow {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
   }
 }
 
