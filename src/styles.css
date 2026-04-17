@@ -1251,6 +1251,16 @@ button {
   .step-item,
   .step-item.reverse {
     grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .step-item.reverse .step-copy {
+    order: 0;
+  }
+
+  .step-item.reverse .step-visual {
+    order: 1;
   }
 
   .step-copy,
@@ -1286,21 +1296,35 @@ button {
   }
 
   .container {
-    width: min(1120px, calc(100% - 1.25rem));
+    width: min(1120px, calc(100% - 2rem));
   }
 
   .section,
   .logo-strip {
-    padding: 4.5rem 0;
+    padding: 4rem 0;
   }
 
   .hero {
     gap: 2rem;
+    padding-top: 2.5rem;
+  }
+
+  .phone-scene {
+    padding: 0 1rem;
   }
 
   .phone-frame {
-    width: min(100%, 19rem);
-    height: 37rem;
+    width: min(100%, 18rem);
+    height: 36rem;
+  }
+
+  .translate-stack {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .steps-shell {
+    width: min(64rem, calc(100% - 2rem));
   }
 
   .pricing-card,
@@ -1314,6 +1338,10 @@ button {
 
   .pricing-metric {
     min-height: auto;
+  }
+
+  .footer-brand p {
+    margin-top: 0.75rem;
   }
 
   .footer-bottom,
