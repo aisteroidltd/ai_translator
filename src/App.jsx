@@ -63,7 +63,11 @@ const features = [
   },
 ];
 
-const logos = ["OpenAI", "Anthropic", "DeepL", "Google AI"];
+const supportedModels = [
+  "OpenAI",
+  "Google Gemini",
+  "DeepL"
+];
 
 const pricingMetrics = [
   {
@@ -88,6 +92,7 @@ const pricingMetrics = [
 
 function App() {
   const [navScrolled, setNavScrolled] = useState(false);
+  const [showTranslatedMessage, setShowTranslatedMessage] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setNavScrolled(window.scrollY > 20);
@@ -116,6 +121,14 @@ function App() {
     elements.forEach((element) => observer.observe(element));
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setShowTranslatedMessage(true);
+    }, 1800);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   return (
@@ -215,25 +228,22 @@ function App() {
                   </div>
                 </div>
 
-                <div className="message-row assistant-row typing-row">
+                <div className="message-row assistant-row reply-row">
                   <div className="mini-avatar">AI</div>
-                  <div className="message assistant-message typing">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                </div>
-
-                <div className="message-row assistant-row final-row">
-                  <div className="mini-avatar">AI</div>
-                  <div className="message assistant-message translated-message">
-                    <strong>
-                      「来週の水曜日にサンプルを発送する予定ですので、ご査収のほどよろしくお願いいたします。」
-                    </strong>
-                    {/* <div className="message-actions">
-                      <button type="button">複製</button>
-                      <button type="button">發音</button>
-                    </div> */}
+                  <div
+                    className={`message assistant-message ${showTranslatedMessage ? "translated-message" : "typing"}`}
+                  >
+                    {showTranslatedMessage ? (
+                      <strong>
+                        「来週の水曜日にサンプルを発送する予定ですので、ご査収のほどよろしくお願いいたします。」
+                      </strong>
+                    ) : (
+                      <>
+                        <span />
+                        <span />
+                        <span />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -245,7 +255,7 @@ function App() {
               </div>
             </div>
 
-            <div className="floating-card stats-card">
+            {/* <div className="floating-card stats-card">
               <span className="flag">🇯🇵</span>
               <div>
                 <p>精準度</p>
@@ -259,7 +269,7 @@ function App() {
                 <p>反應時間</p>
                 <strong>&lt; 0.5s</strong>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
 
@@ -267,10 +277,10 @@ function App() {
           <div className="container">
             <p className="eyebrow">支援多種最頂尖 AI 模型</p>
             <div className="logo-row">
-              {logos.map((logo) => (
-                <div className="logo-chip" key={logo}>
+              {supportedModels.map((model) => (
+                <div className="logo-chip" key={model}>
                   <span className="logo-dot" />
-                  {logo}
+                  {model}
                 </div>
               ))}
             </div>
